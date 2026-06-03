@@ -30,34 +30,13 @@ public class CoffeeShopRewardsSystem {
                 pause(console);
 
             } else if (choice == 2) {
-                System.out.print("Enter customer ID: ");
-                int id = console.nextInt();
-
-                if (customers.containsKey(id)) {
-                    Customer customer = customers.get(id);
-
-                    showMenu(menu);
-                    System.out.print("Choose a drink number: ");
-                    int drinkChoice = console.nextInt();
-
-                    if (drinkChoice >= 1 && drinkChoice <= menu.size()) {
-                        Drink selectedDrink = menu.get(drinkChoice - 1);
-                        Order order = new Order(customer, selectedDrink);
-                        order.processOrder();
-                    } else {
-                        System.out.println("Invalid drink choice.");
-                    }
-
-                } else {
-                    System.out.println("Customer not found.");
-                }
-
-                console.nextLine();
+                buyDrinks(console, customers, menu);
                 pause(console);
 
             } else if (choice == 3) {
                 System.out.print("Enter customer ID: ");
                 int id = console.nextInt();
+                console.nextLine();
 
                 if (customers.containsKey(id)) {
                     Customer customer = customers.get(id);
@@ -66,12 +45,12 @@ public class CoffeeShopRewardsSystem {
                     System.out.println("Customer not found.");
                 }
 
-                console.nextLine();
                 pause(console);
 
             } else if (choice == 4) {
                 System.out.print("Enter customer ID: ");
                 int id = console.nextInt();
+                console.nextLine();
 
                 if (customers.containsKey(id)) {
                     Customer customer = customers.get(id);
@@ -80,7 +59,6 @@ public class CoffeeShopRewardsSystem {
                     System.out.println("Customer not found.");
                 }
 
-                console.nextLine();
                 pause(console);
 
             } else if (choice == 5) {
@@ -107,6 +85,113 @@ public class CoffeeShopRewardsSystem {
             } else {
                 System.out.println("Invalid option.");
                 pause(console);
+            }
+        }
+    }
+
+    public static void buyDrinks(Scanner console, HashMap<Integer, Customer> customers, ArrayList<Drink> menu) {
+        System.out.print("Enter customer ID: ");
+        int id = console.nextInt();
+        console.nextLine();
+
+        if (!customers.containsKey(id)) {
+            System.out.println("Customer not found.");
+            return;
+        }
+
+        Customer customer = customers.get(id);
+        Order order = new Order(customer);
+
+        boolean ordering = true;
+
+        while (ordering) {
+            System.out.println("\n=== Current Order Menu ===");
+            System.out.println("1. Add drink");
+            System.out.println("2. Remove drink");
+            System.out.println("3. Adjust quantity");
+            System.out.println("4. View order");
+            System.out.println("5. Confirm order");
+            System.out.println("6. Cancel order");
+            System.out.print("Choose an option: ");
+
+            int orderChoice = console.nextInt();
+            console.nextLine();
+
+            if (orderChoice == 1) {
+                showMenu(menu);
+
+                System.out.print("Choose a drink number: ");
+                int drinkChoice = console.nextInt();
+                console.nextLine();
+
+                if (drinkChoice >= 1 && drinkChoice <= menu.size()) {
+                    Drink selectedDrink = menu.get(drinkChoice - 1);
+
+                    System.out.print("Enter quantity: ");
+                    int quantity = console.nextInt();
+                    console.nextLine();
+
+                    if (quantity <= 0) {
+                        System.out.println("Quantity must be greater than 0.");
+                    } else {
+                        System.out.print("Enter sugar level, for example 0%, 25%, 50%, 75%, or 100%: ");
+                        String sugarLevel = console.nextLine();
+
+                        order.addItem(selectedDrink, quantity, sugarLevel);
+                        System.out.println("Drink added to order.");
+                    }
+
+                } else {
+                    System.out.println("Invalid drink choice.");
+                }
+
+            } else if (orderChoice == 2) {
+                if (order.isEmpty()) {
+                    System.out.println("Your order is currently empty.");
+                } else {
+                    order.printOrder();
+
+                    System.out.print("Enter item number to remove: ");
+                    int itemNumber = console.nextInt();
+                    console.nextLine();
+
+                    order.removeItem(itemNumber);
+                }
+
+            } else if (orderChoice == 3) {
+                if (order.isEmpty()) {
+                    System.out.println("Your order is currently empty.");
+                } else {
+                    order.printOrder();
+
+                    System.out.print("Enter item number to adjust: ");
+                    int itemNumber = console.nextInt();
+                    console.nextLine();
+
+                    System.out.print("Enter new quantity: ");
+                    int newQuantity = console.nextInt();
+                    console.nextLine();
+
+                    order.adjustQuantity(itemNumber, newQuantity);
+                }
+
+            } else if (orderChoice == 4) {
+                order.printOrder();
+
+            } else if (orderChoice == 5) {
+                if (order.isEmpty()) {
+                    System.out.println("You cannot confirm an empty order.");
+                } else {
+                    order.processOrder();
+                    ordering = false;
+                }
+
+            } else if (orderChoice == 6) {
+                System.out.println("Order canceled.");
+                ordering = false;
+
+            } else {
+                System.out.println("Invalid option.");
             }
         }
     }
