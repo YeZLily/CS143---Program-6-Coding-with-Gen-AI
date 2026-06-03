@@ -48,17 +48,7 @@ public class CoffeeShopRewardsSystem {
                 pause(console);
 
             } else if (choice == 4) {
-                System.out.print("Enter customer ID: ");
-                int id = console.nextInt();
-                console.nextLine();
-
-                if (customers.containsKey(id)) {
-                    Customer customer = customers.get(id);
-                    customer.redeemReward();
-                } else {
-                    System.out.println("Customer not found.");
-                }
-
+                redeemFreeDrink(console, customers, menu);
                 pause(console);
 
             } else if (choice == 5) {
@@ -196,12 +186,61 @@ public class CoffeeShopRewardsSystem {
         }
     }
 
+    public static void redeemFreeDrink(Scanner console, HashMap<Integer, Customer> customers, ArrayList<Drink> menu) {
+        int rewardCost = 50;
+
+        System.out.print("Enter customer ID: ");
+        int id = console.nextInt();
+        console.nextLine();
+
+        if (!customers.containsKey(id)) {
+            System.out.println("Customer not found.");
+            return;
+        }
+
+        Customer customer = customers.get(id);
+
+        System.out.println(customer.getName() + " has " + customer.getPoints() + " points.");
+        System.out.println("A free drink reward costs " + rewardCost + " points.");
+
+        if (!customer.hasEnoughPoints(rewardCost)) {
+            System.out.println("You do not have enough points to claim a free drink.");
+            System.out.println("You need " + (rewardCost - customer.getPoints()) + " more points.");
+            return;
+        }
+
+        showMenu(menu);
+
+        System.out.print("Choose the free drink you want to claim: ");
+        int drinkChoice = console.nextInt();
+        console.nextLine();
+
+        if (drinkChoice >= 1 && drinkChoice <= menu.size()) {
+            Drink freeDrink = menu.get(drinkChoice - 1);
+
+            System.out.print("Enter sugar level, for example 0%, 25%, 50%, 75%, or 100%: ");
+            String sugarLevel = console.nextLine();
+
+            customer.subtractPoints(rewardCost);
+
+            System.out.println("\nReward claimed successfully!");
+            System.out.println("Customer: " + customer.getName());
+            System.out.println("Free drink: " + freeDrink.getName());
+            System.out.println("Sugar level: " + sugarLevel);
+            System.out.println("Points used: " + rewardCost);
+            System.out.println("Remaining points: " + customer.getPoints());
+
+        } else {
+            System.out.println("Invalid drink choice.");
+        }
+    }
+
     public static void showMainMenu() {
         System.out.println("\n=== Coffee Shop Rewards System ===");
         System.out.println("1. Show drink menu");
-        System.out.println("2. Buy a drink");
+        System.out.println("2. Buy drinks");
         System.out.println("3. Check customer points");
-        System.out.println("4. Redeem points");
+        System.out.println("4. Redeem points for a free drink");
         System.out.println("5. Add new customer");
         System.out.println("6. Exit");
         System.out.print("Choose an option: ");
