@@ -20,19 +20,14 @@ public class CoffeeShopRewardsSystem {
         boolean running = true;
 
         while (running) {
-            System.out.println("\n=== Coffee Shop Rewards System ===");
-            System.out.println("1. Show drink menu");
-            System.out.println("2. Buy a drink");
-            System.out.println("3. Check customer points");
-            System.out.println("4. Redeem points");
-            System.out.println("5. Add new customer");
-            System.out.println("6. Exit");
-            System.out.print("Choose an option: ");
+            showMainMenu();
 
             int choice = console.nextInt();
+            console.nextLine();
 
             if (choice == 1) {
                 showMenu(menu);
+                pause(console);
 
             } else if (choice == 2) {
                 System.out.print("Enter customer ID: ");
@@ -57,6 +52,9 @@ public class CoffeeShopRewardsSystem {
                     System.out.println("Customer not found.");
                 }
 
+                console.nextLine();
+                pause(console);
+
             } else if (choice == 3) {
                 System.out.print("Enter customer ID: ");
                 int id = console.nextInt();
@@ -68,6 +66,9 @@ public class CoffeeShopRewardsSystem {
                     System.out.println("Customer not found.");
                 }
 
+                console.nextLine();
+                pause(console);
+
             } else if (choice == 4) {
                 System.out.print("Enter customer ID: ");
                 int id = console.nextInt();
@@ -78,6 +79,9 @@ public class CoffeeShopRewardsSystem {
                 } else {
                     System.out.println("Customer not found.");
                 }
+
+                console.nextLine();
+                pause(console);
 
             } else if (choice == 5) {
                 System.out.print("Enter new customer ID: ");
@@ -94,14 +98,28 @@ public class CoffeeShopRewardsSystem {
                     System.out.println("Customer added successfully.");
                 }
 
+                pause(console);
+
             } else if (choice == 6) {
                 running = false;
                 System.out.println("Thank you for using the Coffee Shop Rewards System!");
 
             } else {
                 System.out.println("Invalid option.");
+                pause(console);
             }
         }
+    }
+
+    public static void showMainMenu() {
+        System.out.println("\n=== Coffee Shop Rewards System ===");
+        System.out.println("1. Show drink menu");
+        System.out.println("2. Buy a drink");
+        System.out.println("3. Check customer points");
+        System.out.println("4. Redeem points");
+        System.out.println("5. Add new customer");
+        System.out.println("6. Exit");
+        System.out.print("Choose an option: ");
     }
 
     public static void showMenu(ArrayList<Drink> menu) {
@@ -110,5 +128,11 @@ public class CoffeeShopRewardsSystem {
         for (int i = 0; i < menu.size(); i++) {
             System.out.println((i + 1) + ". " + menu.get(i));
         }
+    }
+
+    public static void pause(Scanner console) {
+        System.out.println();
+        System.out.print("Press Enter to go back to the main menu...");
+        console.nextLine();
     }
 }
