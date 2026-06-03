@@ -25,18 +25,12 @@ public class Customer {
         points += pointsEarned;
     }
 
-    public void redeemReward() {
-        int rewardCost = 50;
+    public boolean hasEnoughPoints(int rewardCost) {
+        return points >= rewardCost;
+    }
 
-        if (points >= rewardCost) {
-            points -= rewardCost;
-            System.out.println(name + " redeemed 50 points for a free drink reward!");
-            System.out.println("Remaining points: " + points);
-        } else {
-            System.out.println(name + " does not have enough points to redeem a reward.");
-            System.out.println("Current points: " + points);
-            System.out.println("Points needed: " + rewardCost);
-        }
+    public void subtractPoints(int pointsUsed) {
+        points -= pointsUsed;
     }
 
     public String toString() {
